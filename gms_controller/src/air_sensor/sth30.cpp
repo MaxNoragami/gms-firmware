@@ -22,33 +22,43 @@
  * SOFTWARE.
  */
 
-#include "sn_3002.hpp"
+#include "sth30.hpp"
 
 namespace gms_controller
 {
 
-Sn3002::Sn3002(ModbusRtuController * modbus_rtu_controller)
+Sth30::Sth30(ModbusRtuController * modbus_rtu_controller)
 : modbus_rtu_controller_(modbus_rtu_controller)
 {
 
 }
 
-Sn3002::~Sn3002()
+Sth30::~Sth30()
 {
 
 }
 
-bool Sn3002::initialize()
+bool Sth30::initialize()
 {
     return true;
 }
 
-bool Sn3002::read_all_registers()
+bool Sth30::read_all_registers()
 {
-    int16_t data[8] = {0};
+    int16_t data[2] = {0};
 
-    modbus_rtu_controller_->read_multiple_registers(sensor_address_, HOLDING_REGISTERS, 0x0000, 8, data);
+    modbus_rtu_controller_->read_multiple_registers(sensor_address_, HOLDING_REGISTERS, HUMIDITY_CONTENT_REG_ADDR, 2, data);
 
+    sensor_data_.humidity = data[0] / 100.0f;
+    sensor_data_.temperature = data[1] / 100.0f;
+    
+    Serial.print("Humidity: ");
+    Serial.print(sensor_data_.humidity);
+    Serial.print(" ");
+    Serial.print("Temperature: ");
+    Serial.print(sensor_data_.temperature);
+    Serial.print(" ");
+            
     return false;
 }
 

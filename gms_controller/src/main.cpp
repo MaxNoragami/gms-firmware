@@ -28,11 +28,13 @@
 #include <mbed.h>
 #include <rtos.h>
 
+#include "sth30.hpp"
 #include "sn_3002.hpp"
 
 using namespace rtos;
 
 gms_controller::ModbusRtuController rtu_contorller;
+gms_controller::Sth30 air_sensor(&rtu_contorller);
 gms_controller::Sn3002 soil_sensor(&rtu_contorller);
 
 using namespace rtos;
@@ -42,8 +44,8 @@ rtos::Thread sensorThread(osPriorityNormal, 2048);
 void sensorTask() {
 
     for(;;) {
-        // Read soil sensor data
-        soil_sensor.read_all_registers();
+        air_sensor.read_all_registers();
+        // soil_sensor.read_all_registers();
         ThisThread::sleep_for(std::chrono::milliseconds(1000));
     }
 }
@@ -51,7 +53,8 @@ void sensorTask() {
 void setup() 
 {
     rtu_contorller.initilize();
-    soil_sensor.initialize();
+    air_sensor.initialize();
+    // soil_sensor.initialize();
 
     sensorThread.start(mbed::callback(sensorTask));
 }

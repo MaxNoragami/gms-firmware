@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#ifndef MODBUS_CONTROLLER_SOIL_SENSOR_HPP_
-#define MODBUS_CONTROLLER_SOIL_SENSOR_HPP_
+#ifndef MODBUS_CONTROLLER_AIR_SENSOR_STH30_HPP_
+#define MODBUS_CONTROLLER_AIR_SENSOR_STH30_HPP_
 
 #include <stdio.h>
 
@@ -32,7 +32,7 @@
 namespace gms_controller 
 {
 
-class Sn3002
+class Sth30
 {
 
 public:
@@ -41,22 +41,15 @@ public:
         float humidity;
         float temperature;
     } SensorData;
-
-    enum Sn3002_ReadRegisterAddress {
-        MOISTURE_CONTENT_REG_ADDR               = 0x0000U,
+    
+    enum Sth30_ReadRegisterAddress {
+        HUMIDITY_CONTENT_REG_ADDR               = 0x0000U,
         TEMPERATURE_CONTENT_REG_ADDR            = 0x0001U,
-        CONDUCTIVITY_CONTENT_REG_ADDR           = 0x0002U,
-        PH_CONTENT_REG_ADDR                     = 0x0003U,
-        NITROGEN_CONTENT_REG_ADDR               = 0x0004U,
-        PHOSPHORUS_CONTENT_REG_ADDR             = 0x0005U,
-        POTASSIUM_CONTENT_REG_ADDR              = 0x0006U,
-        SALINITY_CONTENT_REG_ADDR               = 0x0007U,
-        TOTAL_DISSOLVED_SOLIDS_CONTENT_REG_ADDR = 0x0008U,
     };
 
-    explicit Sn3002(ModbusRtuController * modbus_rtu_controller);
+    explicit Sth30(ModbusRtuController * modbus_rtu_controller);
 
-    ~Sn3002();
+    ~Sth30();
 
     bool initialize();
 
@@ -73,4 +66,4 @@ private:
 
 } // namespace gms_controller 
 
-#endif // MODBUS_CONTROLLER_SOIL_SENSOR_HPP_
+#endif // MODBUS_CONTROLLER_AIR_SENSOR_STH30_HPP_

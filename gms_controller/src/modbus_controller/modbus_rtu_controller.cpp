@@ -40,7 +40,7 @@ ModbusRtuController::~ModbusRtuController()
 
 bool ModbusRtuController::initilize()
 {
-    rs_485_port_->begin(4800, SERIAL_8N1, 0, 500);
+    rs_485_port_->begin(9600, SERIAL_8N1, 0, 500);
     rs_485_port_->setYZTerm(false);
     rs_485_port_->setABTerm(false);
     rs_485_port_->setFullDuplex(false);
@@ -48,7 +48,7 @@ bool ModbusRtuController::initilize()
     rs_485_port_->setDelays(1000, 5000);
     rs_485_port_->setModeRS232(false);
 
-    if (!modbus_rtu_client_->begin(*rs_485_port_, 4800, SERIAL_8N1)) {
+    if (!modbus_rtu_client_->begin(*rs_485_port_, 9600, SERIAL_8N1)) {
         Serial.println("Failed to start Modbus RTU Client!");
         return false;
     }
@@ -63,8 +63,10 @@ bool ModbusRtuController::read_single_register(int id, int type, int address)
     return false;
 }
 
-bool ModbusRtuController::read_multiple_registers(int id, int type, int address, int nb)
+bool ModbusRtuController::read_multiple_registers(int id, int type, int address, int nb, int16_t * data)
 {
+    int index = 0UL;
+
     if (!modbus_rtu_client_->requestFrom(id, type, address, nb)) {
         Serial.print("Failed to read registers! ");
         Serial.println(modbus_rtu_client_->lastError());
@@ -78,8 +80,10 @@ bool ModbusRtuController::read_multiple_registers(int id, int type, int address,
         }
 
         while (modbus_rtu_client_->available()) {
-            Serial.print((float)modbus_rtu_client_->read() / 10.0);
-            Serial.print(" ");
+            data[index] = modbus_rtu_client_->read();
+            index++;
+            
+            if (index >= nb) break;
         }
         
         Serial.println();

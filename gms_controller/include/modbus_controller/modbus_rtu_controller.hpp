@@ -45,9 +45,11 @@ public:
 
     bool read_single_register(int id, int type, int address);
 
-    bool read_multiple_registers(int id, int type, int address, int nb);
+    bool read_multiple_registers(int id, int type, int address, int nb, int16_t * data);
 
 private:
+
+    uint16_t buff[256]{0};
 
     ModbusRTUClientClass * modbus_rtu_client_;
 
