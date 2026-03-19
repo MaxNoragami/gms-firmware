@@ -45,17 +45,18 @@ void sensorTask() {
 
     for(;;) {
         air_sensor.read_all_registers();
-        // soil_sensor.read_all_registers();
+        delay(100);
+        air_sensor.set_device_address(DEVICE_ADDRESS_NEW);
+        delay(100);
+        // air_sensor.set_device_baudrate(DEVICE_BAUD);
         ThisThread::sleep_for(std::chrono::milliseconds(1000));
     }
 }
 
-void setup() 
+void setup()
 {
     rtu_contorller.initilize();
     air_sensor.initialize();
-    // soil_sensor.initialize();
-
     sensorThread.start(mbed::callback(sensorTask));
 }
 

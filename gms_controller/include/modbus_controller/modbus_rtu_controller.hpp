@@ -47,6 +47,8 @@ public:
 
     bool read_multiple_registers(int id, int type, int address, int nb, int16_t * data);
 
+    bool write_single_register(int id, int reg_address, uint16_t value);
+
 private:
 
     uint16_t buff[256]{0};

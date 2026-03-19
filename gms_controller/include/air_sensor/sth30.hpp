@@ -32,6 +32,10 @@
 namespace gms_controller 
 {
 
+#define DEVICE_ADDRESS      2
+#define DEVICE_ADDRESS_NEW  10
+#define DEVICE_BAUD         2 // 4800
+
 class Sth30
 {
 
@@ -42,9 +46,25 @@ public:
         float temperature;
     } SensorData;
     
+    typedef struct SensorFactoryData_ {
+        uint16_t device_addr;
+        uint16_t baud;
+    } SensorFactoryData;
+    
+    typedef struct SensorCorrectionData_ {
+        uint16_t temp_correction;
+        uint16_t hum_correction;
+    } SensorCorrectionData;
+    
     enum Sth30_ReadRegisterAddress {
         HUMIDITY_CONTENT_REG_ADDR               = 0x0000U,
         TEMPERATURE_CONTENT_REG_ADDR            = 0x0001U,
+    };
+
+    enum Sth30_ReadWriteRegisterAddress {
+        DEVICE_ADDRESS_CONTENT_REG_ADDR         = 0x0066U,
+        BAUDRATE_CONTENT_REG_ADDR               = 0x0067U,
+        TEMP_CORRECTION_CONTENT_REG_ADDR        = 0x006BU,
     };
 
     explicit Sth30(ModbusRtuController * modbus_rtu_controller);
@@ -55,13 +75,20 @@ public:
 
     bool read_all_registers();
 
+    bool set_device_address(const uint8_t address);
+
+    bool set_device_baudrate(const uint8_t baud);
+
 private:
 
-    int sensor_address_{1};
+    int sensor_address_{DEVICE_ADDRESS};
+    int sensor_baud_{DEVICE_BAUD};
 
     ModbusRtuController * modbus_rtu_controller_;
 
     SensorData sensor_data_{0.0f, 0.0f};
+    SensorFactoryData sensor_factory_data_{0U, 0U};
+    SensorCorrectionData sensor_correction_data_{0U, 0U};
 };
 
 } // namespace gms_controller 
