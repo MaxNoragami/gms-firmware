@@ -31,15 +31,20 @@
 #include "sth30.hpp"
 #include "sn_3002.hpp"
 
+#include "modbus_tcp_controller.hpp"
+
 using namespace rtos;
 
 gms_controller::ModbusRtuController rtu_contorller;
 gms_controller::Sth30 air_sensor(&rtu_contorller);
 gms_controller::Sn3002 soil_sensor(&rtu_contorller);
 
+gms_controller::ModbusTcpController modbus_tcp_controller(&Ethernet);
+
 using namespace rtos;
 
 rtos::Thread sensorThread(osPriorityNormal, 2048);
+rtos::Thread comThread(osPriorityHigh, 2048);
 
 void sensorTask() {
 
@@ -70,7 +75,6 @@ void sensorTask() {
         Serial.print("\n");
         Serial.print("Temperature: ");
         Serial.print(soil_sensor.get_temp());
-        
         Serial.print("\n");
         Serial.print("Conductivity: ");
         Serial.print(soil_sensor.get_conductivity());
@@ -94,16 +98,42 @@ void sensorTask() {
         Serial.println(soil_sensor.get_total_disolved_solid());
         Serial.print("\n");
 
+        float buff[11];
+        
+        buff[0]  = air_sensor.get_humidity();
+        buff[1]  = air_sensor.get_temp();
+        buff[2]  = soil_sensor.get_moisture();
+        buff[3]  = soil_sensor.get_temp();
+        buff[4]  = soil_sensor.get_conductivity();
+        buff[5]  = soil_sensor.get_ph();
+        buff[6]  = soil_sensor.get_nitrogen();
+        buff[7]  = soil_sensor.get_phosphorus();
+        buff[8]  = soil_sensor.get_potasium();
+        buff[9]  = soil_sensor.get_salinity();
+        buff[10] = soil_sensor.get_total_disolved_solid();
+        
+        modbus_tcp_controller.write_holding_registers(buff, 11);
+
         ThisThread::sleep_for(std::chrono::milliseconds(1000));
+    }
+}
+
+void comTask() {
+
+    for(;;) {
+        modbus_tcp_controller.loop();
+        ThisThread::sleep_for(std::chrono::milliseconds(50));
     }
 }
 
 void setup() 
 {
     rtu_contorller.initilize();
+    modbus_tcp_controller.initilize();
     air_sensor.initialize();
     soil_sensor.initialize();
 
+    comThread.start(mbed::callback(comTask));
     sensorThread.start(mbed::callback(sensorTask));
 }
 
