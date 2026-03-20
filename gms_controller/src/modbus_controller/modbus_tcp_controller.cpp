@@ -110,48 +110,48 @@ bool ModbusTcpController::write_holding_registers(float * data, uint8_t len)
     Register_u32 temp;
 
     temp.f32 = data[0];
-    holding_registers_[0] = temp.u16_arr[0];
-    holding_registers_[1] = temp.u16_arr[1];
+    holding_registers_[0] = temp.u16_arr[1];
+    holding_registers_[1] = temp.u16_arr[0];
     
     temp.f32 = data[1];
-    holding_registers_[2] = temp.u16_arr[0];
-    holding_registers_[3] = temp.u16_arr[1];
+    holding_registers_[2] = temp.u16_arr[1];
+    holding_registers_[3] = temp.u16_arr[0];
     
     temp.f32 = data[2];
-    holding_registers_[4] = temp.u16_arr[0];
-    holding_registers_[5] = temp.u16_arr[1];
+    holding_registers_[4] = temp.u16_arr[1];
+    holding_registers_[5] = temp.u16_arr[0];
     
     temp.f32 = data[3];
-    holding_registers_[6] = temp.u16_arr[0];
-    holding_registers_[7] = temp.u16_arr[1];
+    holding_registers_[6] = temp.u16_arr[1];
+    holding_registers_[7] = temp.u16_arr[0];
     
     temp.f32 = data[4];
-    holding_registers_[8] = temp.u16_arr[0];
-    holding_registers_[9] = temp.u16_arr[1];
+    holding_registers_[8] = temp.u16_arr[1];
+    holding_registers_[9] = temp.u16_arr[0];
 
     temp.f32 = data[5];
-    holding_registers_[10] = temp.u16_arr[0];
-    holding_registers_[11] = temp.u16_arr[1];
+    holding_registers_[10] = temp.u16_arr[1];
+    holding_registers_[11] = temp.u16_arr[0];
 
     temp.f32 = data[6];
-    holding_registers_[12] = temp.u16_arr[0];
-    holding_registers_[13] = temp.u16_arr[1];
+    holding_registers_[12] = temp.u16_arr[1];
+    holding_registers_[13] = temp.u16_arr[0];
 
     temp.f32 = data[7];
-    holding_registers_[14] = temp.u16_arr[0];
-    holding_registers_[15] = temp.u16_arr[1];
+    holding_registers_[14] = temp.u16_arr[1];
+    holding_registers_[15] = temp.u16_arr[0];
 
     temp.f32 = data[8];
-    holding_registers_[16] = temp.u16_arr[0];
-    holding_registers_[17] = temp.u16_arr[1];
+    holding_registers_[16] = temp.u16_arr[1];
+    holding_registers_[17] = temp.u16_arr[0];
 
     temp.f32 = data[9];
-    holding_registers_[18] = temp.u16_arr[0];
-    holding_registers_[19] = temp.u16_arr[1];
+    holding_registers_[18] = temp.u16_arr[1];
+    holding_registers_[19] = temp.u16_arr[0];
 
     temp.f32 = data[10];
-    holding_registers_[20] = temp.u16_arr[0];
-    holding_registers_[21] = temp.u16_arr[1];
+    holding_registers_[20] = temp.u16_arr[1];
+    holding_registers_[21] = temp.u16_arr[0];
 
     return true;
 }
